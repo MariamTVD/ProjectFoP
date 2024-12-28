@@ -58,28 +58,54 @@ public class Main {
     }
 
 
-    //method for evaluating if statement
-     public static boolean evaluateCondition(String condition) {
+ // Method to evaluate boolean conditions
+    public static boolean evaluateCondition(String condition) {
         String[] parts = condition.split(" ");
-        int left = evaluateOperand(parts[0], variables);
+        int left = evaluateOperand(parts[0]);
         String operator = parts[1];
-        int right = evaluateOperand(parts[2], variables);
+        int right = evaluateOperand(parts[2]);
 
-        switch (operator) {
-            case "==":
-                return left == right;
-            case "!=":
-                return left != right;
-            case "<":
-                return left < right;
-            case "<=":
-                return left <= right;
-            case ">":
-                return left > right;
-            case ">=":
-                return left >= right;
-            default:
-                throw new IllegalArgumentException("Invalid operator: " + operator);
+        return switch (operator) {
+            case "==" -> left == right;
+            case "!=" -> left != right;
+            case "<" -> left < right;
+            case "<=" -> left <= right;
+            case ">" -> left > right;
+            case ">=" -> left >= right;
+            default -> throw new IllegalArgumentException("Invalid operator: " + operator);
+        };
+    }
+
+
+    // Method to handle if statements
+    public static void handleIfStatement(String[] lines, int startIndex) {
+        // Defining syntax error
+        if (!lines[startIndex].contains(":")) {
+            System.out.println("Syntax Error, \":\" must be included, please try again");
+            return;
+        }
+        String condition = lines[startIndex].substring(3, lines[startIndex].indexOf(':')).trim();
+        boolean conditionResult = evaluateCondition(condition);
+        int i = startIndex + 1;
+        while (i < lines.length && !lines[i].trim().equals("else") && !lines[i].trim().startsWith("if") &&
+        lines[i].startsWith("\t")) {
+            if (conditionResult) {
+                executeCommand(lines[i]);
+            }
+            i++;
+        }
+        /// Method to execute a command
+    public static void executeCommand(String line) {
+        line = line.trim();
+
+        if (line.contains("=")) {
+            // Handle variable assignment
+            String[] parts = line.split("=");
+            String varName = parts[0].trim();
+            String expression = parts[1].trim();
+            variables.put(varName, defineExpression(varName, expression)); // Evaluate and store the variable
+        } else if (line.startsWith("print")) {
+            executePrint(line);
         }
     }
 
