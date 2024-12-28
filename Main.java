@@ -222,6 +222,8 @@ class Tokenizer { // Tokenizer class:Supports integers, decimals, operators, and
                 if (line.startsWith("print")) {
                     executePrint(line);
                 }
+                if (line.startsWith("if"){
+                    executeIfStatement(linesOfInput, i);
             else if(line.startsWith("while")){
                 String condition = line.substring(5,line.indexOf(':')).trim();//Parse condition of while loop.
             }
