@@ -56,32 +56,15 @@ public class Main {
         }
         return value;
     }
- // method to handle printing
- public static void executePrint(String input) {
-    if (input.startsWith("print(") && input.endsWith(")")) {
-        int startIndex = input.indexOf("(") + 1;
-        int endIndex = input.lastIndexOf(")");
-        String toPrint = input.substring(startIndex, endIndex).replace("\"", "").trim();
 
-        if (variables.containsKey(toPrint)) {
-            System.out.println(variables.get(toPrint)); // Print variable value
-        } else {
-            System.out.println(toPrint); // Print raw string
-        }
-    } else {
-        System.out.println("Syntax error or unknown command: " + input);
-    }
-}
-
-// method to execute the stored commands 
-
+    // method for printing
 public static void executeCommands(String[] lines) {
     for (String line : lines) {
         if (line.contains("=")) {
             String[] parts = line.split("=");
             String key = parts[0].trim();
             int value = Integer.parseInt(parts[1].trim());
-            variables.put(key, value); // Store variable assignment
+            values.put(key, value); // Store variable assignment
         } else if (line.startsWith("print(")) {
             executePrint(line); // Handle print
         } else {
@@ -89,6 +72,22 @@ public static void executeCommands(String[] lines) {
         }
     }
 }
+
+// Method to evaluate expressions with simple arithmetic
+public static int evaluateExpression(String expression) {
+    try {
+        String[] terms = expression.split("\\+");
+        int result = 0;
+        for (String term : terms) {
+            term = term.trim();
+            result += Integer.parseInt(term);
+        }
+        return result;
+    } catch (Exception e) {
+        throw new IllegalArgumentException("Invalid expression: " + expression);
+    }
+}
+
 
 
 class Tokenizer { // Tokenizer class:Supports integers, decimals, operators, and parentheses,Skips spaces for clean processing,Throws an error for invalid characters.
