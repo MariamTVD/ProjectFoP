@@ -58,35 +58,18 @@ public class Main {
     }
 
     // method for printing
-public static void executeCommands(String[] lines) {
-    for (String line : lines) {
-        if (line.contains("=")) {
-            String[] parts = line.split("=");
-            String key = parts[0].trim();
-            int value = Integer.parseInt(parts[1].trim());
-            values.put(key, value); // Store variable assignment
-        } else if (line.startsWith("print(")) {
-            executePrint(line); // Handle print
-        } else {
-            System.out.println("Unknown command: " + line);
-        }
-    }
-}
+    public static void executePrint(String input) {
+        input.startsWith("print(") && input.endsWith(")")
+            int startIndex = input.indexOf("(") + 1;
+            int endIndex = input.lastIndexOf(")");
+            String toPrint = input.substring(startIndex, endIndex).replace( "\"", "").trim();
 
-// Method to evaluate expressions with simple arithmetic
-public static int evaluateExpression(String expression) {
-    try {
-        String[] terms = expression.split("\\+");
-        int result = 0;
-        for (String term : terms) {
-            term = term.trim();
-            result += Integer.parseInt(term);
-        }
-        return result;
-    } catch (Exception e) {
-        throw new IllegalArgumentException("Invalid expression: " + expression);
+    if (variables.containsKey(toPrint)) {
+        System.out.println(variables.get(toPrint)); //Print variable value
+    } else {
+        System.out.println(toPrint);  //Print raw string
     }
-}
+
 
 
 
@@ -174,8 +157,7 @@ class Tokenizer { // Tokenizer class:Supports integers, decimals, operators, and
         }
    String[] linesOfInput = input.toString().split("\n");
         linesOfInput = removeEmptyLines(linesOfInput); // clear out empty lines
-        executeCommands(linesOfInput); // Execute all commands
-
+        
         for (int i = 0; i < linesOfInput.length; i++) {
             String line = linesOfInput[i];
 
