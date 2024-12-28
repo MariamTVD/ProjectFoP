@@ -1,11 +1,11 @@
 import java.util.Scanner;
 import java.util.*;
- import java.util.ArrayList;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
 
-    public static Map<String, Integer> values = new HashMap<>();
+    public static Map<String, Integer> variables = new HashMap<>();
 
       // Removing unnecessary empty lines from user input
     public static String[] removeEmptyLines(String[] lines) {
@@ -184,7 +184,7 @@ class Tokenizer { // Tokenizer class:Supports integers, decimals, operators, and
             if(line.contains("=")) {
                 String[] part = line.split("=");
                 String key = part[0].trim();
-                int value = Integer.parseInt(part[1].trim());
+                String expression = part[1].trim();
                 variables.put(varName, defineExpression(varName, expression));
             }
             else if(line.startsWith("while")){
