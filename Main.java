@@ -167,7 +167,7 @@ class Tokenizer { // Tokenizer class:Supports integers, decimals, operators, and
                 String expression = part[1].trim();
                 variables.put(varName, defineExpression(varName, expression));
             }
-                if (line.startsWith("print") {
+                if (line.startsWith("print")) {
                     executePrint(line);
                 }
             else if(line.startsWith("while")){
