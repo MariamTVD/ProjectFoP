@@ -21,7 +21,7 @@ public class Main {
  // Method for evaluating arithmetic expressions
     // (defining whether we are assigning number value or we are changing value
     // according to already defined variable) (EXAMPLE: x = 10 or x = x + 5)
-    private static int evaluateOperand(String operand, Map<String, Integer> variables) {
+    private static int evaluateOperand(String operand) {
         operand = operand.trim();
         if (variables.containsKey(operand)) {
             return variables.get(operand); // Fetch the variable value if defined
@@ -36,23 +36,23 @@ public class Main {
 
         if (expression.contains("+")) {
             String[] operands = expression.split("\\+");
-            value = evaluateOperand(operands[0], variables) + evaluateOperand(operands[1], variables);
+            value = evaluateOperand(operands[0]) + evaluateOperand(operands[1]);
             variables.put(varName, value);
         } else if (expression.contains("-")) {
             String[] operands = expression.split("-");
-            value = evaluateOperand(operands[0], variables) - evaluateOperand(operands[1], variables);
+            value = evaluateOperand(operands[0]) - evaluateOperand(operands[1]);
         } else if (expression.contains("*")) {
             String[] operands = expression.split("\\*");
-            value = evaluateOperand(operands[0], variables) * evaluateOperand(operands[1], variables);
+            value = evaluateOperand(operands[0]) * evaluateOperand(operands[1]);
         } else if (expression.contains("/")) {
             String[] operands = expression.split("/");
-            value = evaluateOperand(operands[0], variables) / evaluateOperand(operands[1], variables);
+            value = evaluateOperand(operands[0]) / evaluateOperand(operands[1]);
         } else if (expression.contains("%")) {
             String[] operands = expression.split("%");
-            value = evaluateOperand(operands[0], variables) % evaluateOperand(operands[1], variables);
+            value = evaluateOperand(operands[0]) % evaluateOperand(operands[1]);
         } else {
             // If no operator, it must be a single number or variable
-            value = evaluateOperand(expression, variables);
+            value = evaluateOperand(expression);
         }
         return value;
     }
@@ -94,6 +94,7 @@ public class Main {
             }
             i++;
         }
+    }
         /// Method to execute a command
     public static void executeCommand(String line) {
         line = line.trim();
@@ -222,9 +223,10 @@ class Tokenizer { // Tokenizer class:Supports integers, decimals, operators, and
                 if (line.startsWith("print")) {
                     executePrint(line);
                 }
-                if (line.startsWith("if"){
-                    executeIfStatement(linesOfInput, i);
-            else if(line.startsWith("while")){
+                if (line.startsWith("if")){
+                    handleIfStatement(linesOfInput, i);
+                }
+                if(line.startsWith("while")){
                 String condition = line.substring(5,line.indexOf(':')).trim();//Parse condition of while loop.
             }
         }
