@@ -1,5 +1,7 @@
 import java.util.Scanner;
 import java.util.*;
+ import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
 
@@ -38,6 +40,73 @@ public class Main {
         scanner.close();  // Close the scanner to avoid resource leak
     }
 }
+
+class Tokenizer {
+    // Define possible token types
+    enum TokenType { NUMBER, OPERATOR, PARENTHESIS }
+
+    // Represents a single token
+    static class Token {
+        TokenType type;
+        String value;
+
+        Token(TokenType type, String value) {
+            this.type = type;
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return "Token{" +
+                    "type=" + type +
+                    ", value='" + value + '\'' +
+                    '}';
+        }
+    }
+
+
+    // Main tokenize function
+    public List<Token> tokenize(String expression) {
+        List<Token> tokens = new ArrayList<>(); // List to hold tokens
+        char[] chars = expression.toCharArray(); // Convert input to characters
+        StringBuilder numberBuffer = new StringBuilder(); // Temporary storage for multi-digit numbers
+
+        for (char c : chars) {
+            // Build numbers
+            if (Character.isDigit(c) || c == '.') {
+                numberBuffer.append(c); // Collect digits into number buffer
+            } else {
+                // If we were collecting a number, finalize it
+                if (!numberBuffer.isEmpty()) {
+                    tokens.add(new Token(TokenType.NUMBER, numberBuffer.toString()));
+                    numberBuffer.setLength(0); // Clear the buffer
+                }
+
+                // Handle operators
+                if (c == '+' || c == '-' || c == '*' || c == '/' || c == '%') {
+                    tokens.add(new Token(TokenType.OPERATOR, String.valueOf(c)));
+                }
+                // Handle parentheses
+                else if (c == '(' || c == ')') {
+                    tokens.add(new Token(TokenType.PARENTHESIS, String.valueOf(c)));
+                }
+                // Skip spaces
+                else if (Character.isWhitespace(c)) {
+                    continue;
+                } else {
+                    throw new IllegalArgumentException("Invalid character in expression: " + c);
+                }
+            }
+        }
+
+        // Add any leftover number in the buffer
+        if (!numberBuffer.isEmpty()) {
+            tokens.add(new Token(TokenType.NUMBER, numberBuffer.toString()));
+        }
+
+        return tokens; // Return the list of tokens
+    }
+}
     
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -70,3 +139,4 @@ public class Main {
         
     }
 }
+
