@@ -63,8 +63,8 @@ public class Main {
         int endIndex = input.lastIndexOf(")");
         String toPrint = input.substring(startIndex, endIndex).replace("\"", "").trim();
 
-        if (values.containsKey(toPrint)) {
-            System.out.println(values.get(toPrint)); // Print variable value
+        if (variables.containsKey(toPrint)) {
+            System.out.println(variables.get(toPrint)); // Print variable value
         } else {
             System.out.println(toPrint); // Print raw string
         }
@@ -81,7 +81,7 @@ public static void executeCommands(String[] lines) {
             String[] parts = line.split("=");
             String key = parts[0].trim();
             int value = Integer.parseInt(parts[1].trim());
-            values.put(key, value); // Store variable assignment
+            variables.put(key, value); // Store variable assignment
         } else if (line.startsWith("print(")) {
             executePrint(line); // Handle print
         } else {
@@ -183,7 +183,7 @@ class Tokenizer { // Tokenizer class:Supports integers, decimals, operators, and
             // handling an assignment operation
             if(line.contains("=")) {
                 String[] part = line.split("=");
-                String key = part[0].trim();
+                String varName = part[0].trim();
                 String expression = part[1].trim();
                 variables.put(varName, defineExpression(varName, expression));
             }
