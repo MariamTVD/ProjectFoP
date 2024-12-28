@@ -17,6 +17,28 @@ public class Main {
         return nonEmptyLines.toArray(new String[0]);
     }
     
+    class print {
+    public static void print() {
+        System.out.println("Start coding here: ");  // Gives instruction
+
+        Scanner scanner = new Scanner(System.in);  // For user input
+        String input = scanner.nextLine();  // Reads the entire input line
+
+        // Check if the command starts with "print"
+        if (input.startsWith("print(") && input.endsWith(")")) {
+            // Extract the content between the parentheses
+            int startIndex = input.indexOf("(") + 1;
+            int endIndex = input.lastIndexOf(")");
+            String toPrint = input.substring(startIndex, endIndex).replace("\"", ""); // Remove quotes
+            System.out.println(toPrint);  // Print the extracted content
+        } else {
+            System.out.println("Syntax error or unknown command.");
+        }
+
+        scanner.close();  // Close the scanner to avoid resource leak
+    }
+}
+    
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         StringBuilder input = new StringBuilder();
