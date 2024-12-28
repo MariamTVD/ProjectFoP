@@ -150,6 +150,8 @@ class Tokenizer { // Tokenizer class:Supports integers, decimals, operators, and
                 int value = Integer.parseInt(part[1].trim());
                 Main.values.put(key, value );
             
+            }else if(line.startsWith("while")){
+                String condition = line.substring(5,line.indexOf(':')).trim();//Parse condition of while loop.
             }
         }
         
