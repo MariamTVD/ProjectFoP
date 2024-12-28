@@ -57,6 +57,32 @@ public class Main {
         return value;
     }
 
+
+    //method for evaluating if statement
+     public static boolean evaluateCondition(String condition) {
+        String[] parts = condition.split(" ");
+        int left = evaluateOperand(parts[0], variables);
+        String operator = parts[1];
+        int right = evaluateOperand(parts[2], variables);
+
+        switch (operator) {
+            case "==":
+                return left == right;
+            case "!=":
+                return left != right;
+            case "<":
+                return left < right;
+            case "<=":
+                return left <= right;
+            case ">":
+                return left > right;
+            case ">=":
+                return left >= right;
+            default:
+                throw new IllegalArgumentException("Invalid operator: " + operator);
+        }
+    }
+
     // method for printing
     public static void executePrint(String input) {
             int startIndex = input.indexOf("(") + 1;
