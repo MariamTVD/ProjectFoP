@@ -59,7 +59,6 @@ public class Main {
 
     // method for printing
     public static void executePrint(String input) {
-        input.startsWith("print(") && input.endsWith(")")
             int startIndex = input.indexOf("(") + 1;
             int endIndex = input.lastIndexOf(")");
             String toPrint = input.substring(startIndex, endIndex).replace( "\"", "").trim();
@@ -69,7 +68,7 @@ public class Main {
     } else {
         System.out.println(toPrint);  //Print raw string
     }
-
+    }
 
 
 
@@ -168,6 +167,9 @@ class Tokenizer { // Tokenizer class:Supports integers, decimals, operators, and
                 String expression = part[1].trim();
                 variables.put(varName, defineExpression(varName, expression));
             }
+                if (line.startsWith("print") {
+                    executePrint(line);
+                }
             else if(line.startsWith("while")){
                 String condition = line.substring(5,line.indexOf(':')).trim();//Parse condition of while loop.
             }
