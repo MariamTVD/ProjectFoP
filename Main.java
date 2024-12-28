@@ -202,7 +202,7 @@ class Tokenizer { // Tokenizer class:Supports integers, decimals, operators, and
         }
         
     }
-import java.util.Scanner;
+
 
 public class SimpleInterpreter {
 
