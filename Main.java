@@ -41,7 +41,9 @@ public class Main {
     }
 }
 
-class Tokenizer {
+class Tokenizer { // Tokenizer class:Supports integers, decimals, operators, and parentheses,Skips spaces for clean processing,Throws an error for invalid characters.
+
+ 
     // Define possible token types
     enum TokenType { NUMBER, OPERATOR, PARENTHESIS }
 
@@ -69,7 +71,8 @@ class Tokenizer {
     public List<Token> tokenize(String expression) {
         List<Token> tokens = new ArrayList<>(); // List to hold tokens
         char[] chars = expression.toCharArray(); // Convert input to characters
-        StringBuilder numberBuffer = new StringBuilder(); // Temporary storage for multi-digit numbers
+       StringBuilder numberBuffer = new StringBuilder(); // Collects multi-digit numbers
+
 
         for (char c : chars) {
             // Build numbers
@@ -83,7 +86,7 @@ class Tokenizer {
                 }
 
                 // Handle operators
-                if (c == '+' || c == '-' || c == '*' || c == '/' || c == '%') {
+                if ("+-*/%".indexOf(c) >= 0) {
                     tokens.add(new Token(TokenType.OPERATOR, String.valueOf(c)));
                 }
                 // Handle parentheses
