@@ -18,28 +18,41 @@ public class Main {
         }
         return nonEmptyLines.toArray(new String[0]);
     }
-    
-    class print {
-    public static void print() {
-        System.out.println("Start coding here: ");  // Gives instruction
 
-        Scanner scanner = new Scanner(System.in);  // For user input
-        String input = scanner.nextLine();  // Reads the entire input line
+ // method to handle printing
+ public static void executePrint(String input) {
+    if (input.startsWith("print(") && input.endsWith(")")) {
+        int startIndex = input.indexOf("(") + 1;
+        int endIndex = input.lastIndexOf(")");
+        String toPrint = input.substring(startIndex, endIndex).replace("\"", "").trim();
 
-        // Check if the command starts with "print"
-        if (input.startsWith("print(") && input.endsWith(")")) {
-            // Extract the content between the parentheses
-            int startIndex = input.indexOf("(") + 1;
-            int endIndex = input.lastIndexOf(")");
-            String toPrint = input.substring(startIndex, endIndex).replace("\"", ""); // Remove quotes
-            System.out.println(toPrint);  // Print the extracted content
+        if (values.containsKey(toPrint)) {
+            System.out.println(values.get(toPrint)); // Print variable value
         } else {
-            System.out.println("Syntax error or unknown command.");
+            System.out.println(toPrint); // Print raw string
         }
-
-        scanner.close();  // Close the scanner to avoid resource leak
+    } else {
+        System.out.println("Syntax error or unknown command: " + input);
     }
 }
+
+// method to execute the stored commands 
+
+public static void executeCommands(String[] lines) {
+    for (String line : lines) {
+        if (line.contains("=")) {
+            String[] parts = line.split("=");
+            String key = parts[0].trim();
+            int value = Integer.parseInt(parts[1].trim());
+            values.put(key, value); // Store variable assignment
+        } else if (line.startsWith("print(")) {
+            executePrint(line); // Handle print
+        } else {
+            System.out.println("Unknown command: " + line);
+        }
+    }
+}
+
 
 class Tokenizer { // Tokenizer class:Supports integers, decimals, operators, and parentheses,Skips spaces for clean processing,Throws an error for invalid characters.
 
@@ -125,7 +138,7 @@ class Tokenizer { // Tokenizer class:Supports integers, decimals, operators, and
         }
    String[] linesOfInput = input.toString().split("\n");
         linesOfInput = removeEmptyLines(linesOfInput); // clear out empty lines
-        
+        executeCommands(linesOfInput); // Execute all commands
 
         for (int i = 0; i < linesOfInput.length; i++) {
             String line = linesOfInput[i];
