@@ -202,5 +202,183 @@ class Tokenizer { // Tokenizer class:Supports integers, decimals, operators, and
         }
         
     }
+import java.util.Scanner;
+
+public class SimpleInterpreter {
+
+    // Method to sum the first N numbers
+    public static int sumOfFirstNNumbers(int N) {
+        int sum = 0;
+        int i = 1;
+        while (i <= N) {
+            sum += i;
+            i++;
+        }
+        return sum;
+    }
+
+    // Method to compute the factorial of N
+    public static int factorial(int N) {
+        int result = 1;
+        while (N > 1) {
+            result *= N;
+            N--;
+        }
+        return result;
+    }
+
+    // Method to compute the GCD of two numbers
+    public static int gcd(int a, int b) {
+        while (b != 0) {
+            int temp = b;
+            b = a % b;
+            a = temp;
+        }
+        return a;
+    }
+
+    // Method to reverse a number
+    public static int reverseNumber(int n) {
+        int reversed = 0;
+        while (n != 0) {
+            int digit = n % 10;
+            reversed = reversed * 10 + digit;
+            n /= 10;
+        }
+        return reversed;
+    }
+
+    // Method to check if a number is prime
+    public static boolean isPrime(int n) {
+        if (n <= 1) return false;
+        for (int i = 2; i <= Math.sqrt(n); i++) {
+            if (n % i == 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // Method to check if a number is a palindrome
+    public static boolean isPalindrome(int n) {
+        int original = n;
+        int reversed = 0;
+        while (n != 0) {
+            int digit = n % 10;
+            reversed = reversed * 10 + digit;
+            n /= 10;
+        }
+        return original == reversed;
+    }
+
+    // Method to find the largest digit in a number
+    public static int findLargestDigit(int n) {
+        int largest = 0;
+        while (n != 0) {
+            int digit = n % 10;
+            largest = Math.max(largest, digit);
+            n /= 10;
+        }
+        return largest;
+    }
+
+    // Method to sum the digits of a number
+    public static int sumOfDigits(int n) {
+        int sum = 0;
+        while (n != 0) {
+            sum += n % 10;
+            n /= 10;
+        }
+        return sum;
+    }
+
+    // Method to print the multiplication table for N
+    public static void multiplicationTable(int n) {
+        int i = 1;
+        while (i <= 10) {
+            System.out.println(n + " * " + i + " = " + (n * i));
+            i++;
+        }
+    }
+
+    // Method to calculate the Nth Fibonacci number
+    public static int fibonacci(int n) {
+        if (n <= 1) return n;
+        int a = 0, b = 1, result = 0;
+        int i = 2; // Since we already have the first two numbers
+        while (i <= n) {
+            result = a + b;
+            a = b;
+            b = result;
+            i++;
+        }
+        return result;
+    }
+
+    // Method to process user input and execute the corresponding algorithm
+    public static void executeCommand(String command) {
+        String[] parts = command.split(" ");
+        String operation = parts[0];
+        int[] args = new int[parts.length - 1];
+
+        // Parse arguments from the input
+        for (int i = 1; i < parts.length; i++) {
+            args[i - 1] = Integer.parseInt(parts[i]);
+        }
+
+        // Execute the corresponding method based on the command
+        switch (operation) {
+            case "sumOfFirstNNumbers":
+                System.out.println(sumOfFirstNNumbers(args[0]));
+                break;
+            case "factorial":
+                System.out.println(factorial(args[0]));
+                break;
+            case "gcd":
+                System.out.println(gcd(args[0], args[1]));
+                break;
+            case "reverseNumber":
+                System.out.println(reverseNumber(args[0]));
+                break;
+            case "isPrime":
+                System.out.println(isPrime(args[0]));
+                break;
+            case "isPalindrome":
+                System.out.println(isPalindrome(args[0]));
+                break;
+            case "findLargestDigit":
+                System.out.println(findLargestDigit(args[0]));
+                break;
+            case "sumOfDigits":
+                System.out.println(sumOfDigits(args[0]));
+                break;
+            case "multiplicationTable":
+                multiplicationTable(args[0]);
+                break;
+            case "fibonacci":
+                System.out.println(fibonacci(args[0]));
+                break;
+            default:
+                System.out.println("Unknown command.");
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Enter a command to execute (or 'exit' to quit):");
+        while (true) {
+            String input = scanner.nextLine();
+            if (input.equalsIgnoreCase("exit")) {
+                break;
+            }
+            executeCommand(input);
+        }
+    }
+}
+
+
+
+    
 }
 
