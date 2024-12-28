@@ -18,7 +18,44 @@ public class Main {
         }
         return nonEmptyLines.toArray(new String[0]);
     }
+ // Method for evaluating arithmetic expressions
+    // (defining whether we are assigning number value or we are changing value
+    // according to already defined variable) (EXAMPLE: x = 10 or x = x + 5)
+    private static int evaluateOperand(String operand, Map<String, Integer> variables) {
+        operand = operand.trim();
+        if (variables.containsKey(operand)) {
+            return variables.get(operand); // Fetch the variable value if defined
+        } else {
+            return Integer.parseInt(operand); // Parse as integer
+        }
+    }
 
+    // Method for evaluating arithmetic expressions
+    public static int defineExpression(String varName, String expression) {
+        int value;
+
+        if (expression.contains("+")) {
+            String[] operands = expression.split("\\+");
+            value = evaluateOperand(operands[0], variables) + evaluateOperand(operands[1], variables);
+            variables.put(varName, value);
+        } else if (expression.contains("-")) {
+            String[] operands = expression.split("-");
+            value = evaluateOperand(operands[0], variables) - evaluateOperand(operands[1], variables);
+        } else if (expression.contains("*")) {
+            String[] operands = expression.split("\\*");
+            value = evaluateOperand(operands[0], variables) * evaluateOperand(operands[1], variables);
+        } else if (expression.contains("/")) {
+            String[] operands = expression.split("/");
+            value = evaluateOperand(operands[0], variables) / evaluateOperand(operands[1], variables);
+        } else if (expression.contains("%")) {
+            String[] operands = expression.split("%");
+            value = evaluateOperand(operands[0], variables) % evaluateOperand(operands[1], variables);
+        } else {
+            // If no operator, it must be a single number or variable
+            value = evaluateOperand(expression, variables);
+        }
+        return value;
+    }
  // method to handle printing
  public static void executePrint(String input) {
     if (input.startsWith("print(") && input.endsWith(")")) {
@@ -148,9 +185,9 @@ class Tokenizer { // Tokenizer class:Supports integers, decimals, operators, and
                 String[] part = line.split("=");
                 String key = part[0].trim();
                 int value = Integer.parseInt(part[1].trim());
-                Main.values.put(key, value );
-            
-            }else if(line.startsWith("while")){
+                variables.put(varName, defineExpression(varName, expression));
+            }
+            else if(line.startsWith("while")){
                 String condition = line.substring(5,line.indexOf(':')).trim();//Parse condition of while loop.
             }
         }
