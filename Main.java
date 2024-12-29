@@ -1,7 +1,4 @@
-import java.util.Scanner;
 import java.util.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Main {
 
@@ -95,6 +92,30 @@ public class Main {
             i++;
         }
     }
+
+    public static void handleWhileLoop(String[] lines, int startIndex) {
+    // Defining syntax error
+    if (!lines[startIndex].contains(":")) {
+        System.out.println("Syntax Error, \":\" must be included, please try again");
+        return;
+    }
+    String conditionLine = lines[startIndex].trim();
+    String condition = conditionLine.substring(5, lines[startIndex].indexOf(':')).trim();
+    List<String> loopBody = new ArrayList<>();
+    int i = startIndex + 1;
+
+    // collect all lines in the loop body
+    while (i < lines.length && lines[i].startsWith("\t")) {
+        loopBody.add(lines[i].trim());
+        i++;
+    }
+    // execute loop while the condition is true
+    while (evaluateCondition(condition)) {
+        for (String command : loopBody) {
+            executeCommand(command);
+        }
+    }
+}
         /// Method to execute a command
     public static void executeCommand(String line) {
         line = line.trim();
@@ -220,14 +241,17 @@ class Tokenizer { // Tokenizer class:Supports integers, decimals, operators, and
                 String expression = part[1].trim();
                 variables.put(varName, defineExpression(varName, expression));
             }
-                if (line.startsWith("print")) {
+            //handling print 
+            if (line.startsWith("print")) {
                     executePrint(line);
-                }
-                if (line.startsWith("if")){
+             }
+            // handling if statement
+            if (line.startsWith("if")){
                     handleIfStatement(linesOfInput, i);
-                }
+             }
+            // handling while statement
                 if(line.startsWith("while")){
-                String condition = line.substring(5,line.indexOf(':')).trim();//Parse condition of while loop.
+                handleWhileLoop(linesOfInput, i);
             }
         }
         
