@@ -277,6 +277,13 @@ class Tokenizer { // Tokenizer class:Supports integers, decimals, operators, and
         return factorial;
     }
 
+     // Method to check if a number is a palindrome
+    public static boolean isPalindrome(int number) {
+        int originalNumber = number;
+        int reversedNumber = reverseNumber(number);
+        return originalNumber == reversedNumber;
+    }
+
  
 
 
@@ -333,5 +340,6 @@ class Tokenizer { // Tokenizer class:Supports integers, decimals, operators, and
             }
         }
     }
+}
 }
 
