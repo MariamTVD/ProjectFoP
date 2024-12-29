@@ -283,7 +283,27 @@ class Tokenizer { // Tokenizer class:Supports integers, decimals, operators, and
         int reversedNumber = reverseNumber(number);
         return originalNumber == reversedNumber;
     }
-
+    
+// Method to Calculate the sum of the digits of a number
+    public static int sumDigits(int number) {
+        int sum = 0;
+        while (number > 0) {
+            sum += number % 10;
+            number /= 10;
+        }
+        return sum;
+    }
+//Method to  Compute the Nth Fibonacci number using iteration or recursion
+public static int fibonacci(int n) {
+        if (n <= 1) return n;
+        int a = 0, b = 1, result = 0;
+        for (int i = 2; i <= n; i++) {
+            result = a + b;
+            a = b;
+            b = result;
+        }
+        return result;
+    }
     
 public class PythonLikeInterpreter {
 
