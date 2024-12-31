@@ -92,43 +92,112 @@ public class Main {
             i++;
         }
     }
+	
+	public class PythonLikeInterpreter {
 
-    public static void handleWhileLoop(String[] lines, int startIndex) {
-    // Defining syntax error
-    if (!lines[startIndex].contains(":")) {
-        System.out.println("Syntax Error, \":\" must be included, please try again");
-        return;
-    }
-    String conditionLine = lines[startIndex].trim();
-    String condition = conditionLine.substring(5, lines[startIndex].indexOf(':')).trim();
-    List<String> loopBody = new ArrayList<>();
-    int i = startIndex + 1;
+    private static final Map<String, Integer> variables = new HashMap<>();
 
-    // collect all lines in the loop body
-    while (i < lines.length && lines[i].startsWith("\t")) {
-        loopBody.add(lines[i].trim());
-        i++;
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        List<String> codeLines = new ArrayList<>();
+
+        System.out.println("Please, enter your code here. Type \"end\" to finish:");
+
+        // Read all lines of code until 'end' is entered
+        while (true) {
+            String line = scanner.nextLine().trim();
+            if (line.equals("end")) break;
+            codeLines.add(line);
+        }
+
+        executeCode(codeLines);
     }
-    // execute loop while the condition is true
-    while (evaluateCondition(condition)) {
-        for (String command : loopBody) {
-            executeCommand(command);
+
+    private static void executeCode(List<String> codeLines) {
+        int i = 0;
+        // Execute code line by line
+        while (i < codeLines.size()) {
+            String line = codeLines.get(i).trim();
+
+            if (line.startsWith("let ")) {
+                handleAssignment(line);
+            } else if (line.startsWith("print")) {
+                handlePrint(line);
+            } else if (line.startsWith("while ")) {
+                i = handleWhileLoop(codeLines, i);
+            }
+            i++;
         }
     }
-}
-        /// Method to execute a command
-    public static void executeCommand(String line) {
-        line = line.trim();
 
-        if (line.contains("=")) {
-            // Handle variable assignment
-            String[] parts = line.split("=");
-            String varName = parts[0].trim();
-            String expression = parts[1].trim();
-            variables.put(varName, defineExpression(varName, expression)); // Evaluate and store the variable
-        } else if (line.startsWith("print")) {
-            executePrint(line);
+    private static void handleAssignment(String line) {
+        String[] parts = line.replace("let ", "").split("=");
+        String variable = parts[0].trim();
+        int value = evaluateExpression(parts[1].trim());
+        variables.put(variable, value);
+    }
+
+    private static void handlePrint(String line) {
+        String variable = line.replace("print", "").trim();
+        if (variables.containsKey(variable)) {
+            System.out.println(variables.get(variable));
+        } else {
+            System.out.println("Error: Undefined variable " + variable);
         }
+    }
+
+    private static int handleWhileLoop(List<String> codeLines, int currentIndex) {
+        String conditionLine = codeLines.get(currentIndex).replace("while", "").trim();
+        String[] conditionParts = conditionLine.split("<");
+        String variable = conditionParts[0].trim();
+        int limit = evaluateExpression(conditionParts[1].trim());
+
+        // Collect loop body lines
+        List<String> loopBody = new ArrayList<>();
+        int i = currentIndex + 1;
+        while (i < codeLines.size() && !codeLines.get(i).trim().equals("end")) {
+            loopBody.add(codeLines.get(i).trim());
+            i++;
+        }
+
+        // Execute the loop
+        while (variables.getOrDefault(variable, 0) < limit) {
+            // Execute the loop body
+            for (String line : loopBody) {
+                if (line.startsWith("let ")) {
+                    handleAssignment(line);
+                } else if (line.startsWith("print")) {
+                    handlePrint(line);
+                }
+            }
+            // Ensure the variable gets updated after each iteration
+            if (variables.containsKey(variable)) {
+                int updatedValue = variables.get(variable) + 1;
+                variables.put(variable, updatedValue);  // Update the variable's value
+            }
+        }
+
+        return i; // Return the line index to continue after the loop
+    }
+
+    private static int evaluateExpression(String expression) {
+        // Handle simple integer expressions
+        String[] parts = expression.split("\\+");
+        int value = 0;
+        for (String part : parts) {
+            part = part.trim();
+            if (variables.containsKey(part)) {
+                value += variables.get(part); // Add the variable's value
+            } else {
+                try {
+                    value += Integer.parseInt(part); // Try parsing the value as an integer
+                } catch (NumberFormatException e) {
+                    throw new RuntimeException("Invalid expression: " + expression);
+                }
+            }
+        }
+        return value;
+    
     }
 
     // method for printing
