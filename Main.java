@@ -247,25 +247,6 @@ public static void interpretPalindromeCheck(String code) {
 }
 
 
-public static void interpretSumofDigitsCheck(String code) {
-	int number = extractNumber(code, "number");
-	int sumofDigits = calculateSumofDigits(number);
-	System.out.println("the sum of number " + number + " is " + sumofDigits);
-}
-
-//Interpret Fibonacci Check
-//public static void interpretFibonacciCheck(String code) {
-   // int fibonacciInput = extractNumber(code, "N");
-  //  int fibonacciResult = calculateFibonacci(fibonacciInput);
-   // System.out.println("The " + fibonacciInput + "th Fibonacci number is: " + fibonacciResult);
-//}
-
-
-
-
-
-
-
 // Helper method to extract the number assigned to a variable
 public static int extractNumber(String code, String variable) {
     String[] lines = code.split("\n");
@@ -278,7 +259,109 @@ public static int extractNumber(String code, String variable) {
         }
     }
     throw new IllegalArgumentException("Variable " + variable + " not found.");
+
+
+
+	
 }
+	
+	public class CustomInterpreter {
+    public static void main(String[] args) {
+        // Prompt user to input Python-like code
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Please, enter your Python-like code here. Type 'end' to exit.");
+
+        // Read the input code line by line
+        StringBuilder input = new StringBuilder();
+        while (true) {
+            String line = scanner.nextLine();
+            if (line.equalsIgnoreCase("end")) break; // Stop input when "end" is entered
+            input.append(line).append("\n"); // Append the input line to the code
+        }
+
+        // Convert the input to a string and decide which operation to interpret
+        String code = input.toString();
+        if (code.contains("fibonacci")) {
+            interpretRecursiveFibonacci(code); // Handle Fibonacci calculation
+        } else if (code.contains("sum_digits")) {
+            interpretSumOfDigits(code); // Handle sum of digits calculation
+        } else {
+            System.out.println("No valid operation found in the input.");
+        }
+    }
+ // Method to interpret Python-like code for recursive Fibonacci calculation
+    public static void interpretRecursiveFibonacci(String code) {
+        // Ensure the code contains necessary keywords for Fibonacci calculation
+        if (!code.contains("let") || !code.contains("fibonacci")) {
+            System.out.println("No valid Fibonacci calculation found in the input.");
+            return;
+        }
+
+        try {
+            // Parse the variable declaration (e.g., "let n = 10")
+            String[] lines = code.split("\n");
+            int n = 0; // Default value for the Fibonacci term
+            for (String line : lines) {
+                if (line.startsWith("let")) { // Look for a "let" statement
+                    String[] parts = line.split("=");
+                    n = Integer.parseInt(parts[1].trim()); // Extract and parse the value of n
+                }
+            }
+
+            // Compute the Fibonacci number recursively
+            int result = calculateFibonacci(n);
+            System.out.println("Fibonacci(" + n + ") = " + result); // Print the result
+        } catch (Exception e) {
+            System.out.println("Error interpreting code: " + e.getMessage());
+        }
+    }
+
+    // Recursive method to calculate the Nth Fibonacci number
+    public static int calculateFibonacci(int n) {
+        // Base cases: F(0) = 0, F(1) = 1
+        if (n <= 1) return n;
+        // Recursive case: F(n) = F(n-1) + F(n-2)
+        return calculateFibonacci(n - 1) + calculateFibonacci(n - 2);
+    }
+
+    // Method to interpret Python-like code for sum of digits calculation
+    public static void interpretSumOfDigits(String code) {
+        // Ensure the code contains necessary keywords for sum of digits calculation
+        if (!code.contains("let") || !code.contains("sum_digits")) {
+            System.out.println("No valid sum of digits calculation found in the input.");
+            return;
+        }
+
+        try {
+            // Parse the variable declaration (e.g., "let num = 1234")
+            String[] lines = code.split("\n");
+            int number = 0; // Default value for the number
+            for (String line : lines) {
+                if (line.startsWith("let")) { // Look for a "let" statement
+                    String[] parts = line.split("=");
+                    number = Integer.parseInt(parts[1].trim()); // Extract and parse the number
+                }
+            }
+
+            // Compute the sum of the digits
+            int result = sumDigits(number);
+            System.out.println("Sum of digits(" + number + ") = " + result); // Print the result
+        } catch (Exception e) {
+            System.out.println("Error interpreting code: " + e.getMessage());
+        }
+    }
+
+    // Method to calculate the sum of digits of a number
+    public static int sumDigits(int number) {
+        int sum = 0; // Initialize the sum
+        while (number > 0) {
+            sum += number % 10; // Add the last digit to the sum
+            number /= 10; // Remove the last digit
+        }
+        return sum; // Return the total sum
+    }
+}
+
 
 
 
@@ -322,50 +405,6 @@ public static boolean isPalindromeCheck(int number) {
 	return false;
 	
 }
-
-//method to calculate the sum of digits
-public static int calculateSumofDigits(int number) {
-	int sum = 0;
-	while (number > 0) {
-		int digit = number % 10;
-		sum += digit;
-		number /= 10;
-	}
-	return sum;
-}
-
-//Method to calculate the Nth Fibonacci number
-//Method to interpret Fibonacci code
-public static void interpretFibonacciCheck(String code) {
-    String[] lines = code.split("\n");
-    int N = 0, count = 0, a = 1, b = 1;
-
-    for (String line : lines) {
-        line = line.trim();
-
-        if (line.startsWith("N =")) {
-            N = Integer.parseInt(line.split("=")[1].trim());
-        } else if (line.startsWith("count =")) {
-            count = Integer.parseInt(line.split("=")[1].trim());
-        }
-    }
-
-    // Simulate the Fibonacci loop
-    while (count < N) {
-        int temp = b; // Save the current value of b
-        b = a + b;    // Calculate the new value of b
-        a = temp;     // Update a to the old value of b
-        count++;      // Increment the counter
-    }
-
-    System.out.println("The " + N + "th Fibonacci number is: " + a);
-
-
-    if (N <= 0) {
-        System.out.println("Invalid input. N must be a positive integer.");
-    }
-}
-
 
 
 
