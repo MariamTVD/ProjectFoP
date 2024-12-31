@@ -182,9 +182,6 @@ public class Main {
     }
     }
 
-
-
-
     // Interpret class
 
 public static void interpretReversalCheck(String code) {
@@ -225,13 +222,8 @@ public static int extractNumber(String code, String variable) {
         }
     }
     throw new IllegalArgumentException("Variable " + variable + " not found.");
-
-
-
-	
-}
-	
-	public class CustomInterpreter {
+}	
+    public class CustomInterpreter {
     public static void main(String[] args) {
         // Prompt user to input Python-like code
         Scanner scanner = new Scanner(System.in);
@@ -371,48 +363,90 @@ public static boolean isPalindromeCheck(int number) {
 	return false;
 	
 }
+// Creating method for interpreting python code
+public static void InterpretInput(String input) {
+        String[] linesOfInput = input.split("\n");
+        linesOfInput = removeEmptyLines(linesOfInput); // clear out empty lines
 
+        for (int i = 0; i < linesOfInput.length; i++) {
+            String line = linesOfInput[i];
 
+            // handling an assignment operation
+            if (line.contains("=") && !line.startsWith("while") && !line.startsWith("if")) {
+                String[] part = line.split("=");
+                String varName = part[0].trim();
+                String expression = part[1].trim();
+                variables.put(varName, defineExpression(varName, expression));
+            }
+            // handling print assignment
+            if (line.startsWith("print")) {
+                executePrint(line);
+            }
+            //handling if and else
+            if (line.startsWith("if")) {
+                handleIfStatement(linesOfInput, i);
+            }
+            if (line.startsWith("while")) {
+                handleWhileLoop(linesOfInput, i);
+            }
+        }
 
+    }
 
 
 public static void main(String[] args) {
     Scanner scanner = new Scanner(System.in);
-    StringBuilder input = new StringBuilder();
+    String input;
+ System.out.println("Please, enter algorithm number here, to exit enter \"end\"");
+        System.out.println("""
+                              1. Sum of First N Numbers
+                              2. Factorial of N
+                              3. GCD of Two Numbers
+                              4. Reverse a Number
+                              5. Check if a Number is Prime
+                              6. Check if a Number is Palindrome
+                              7. Find the Largest Digit in a Number
+                              8. Sum of Digits
+                              9. Multiplication Table
+                              10. Nth Fibonacci Number
+                """);
 
-    System.out.println("Please, enter your code here, to exit enter \"end\"");
-    while (true) {
-        String line = scanner.nextLine();
-        if (line.equals("end")) break;
-        input.append(line);
-        input.append("\n");
-    }
+        while (true) {
+            System.out.print("Enter chosen number or enter \"end\" to exit : ");
+            String line = scanner.nextLine();
 
-    String[] linesOfInput = input.toString().split("\n");
-    linesOfInput = removeEmptyLines(linesOfInput); // Assuming you have implemented this method
-    
-    for (int i = 0; i < linesOfInput.length; i++) {
-        String line = linesOfInput[i];
+            // Exit condition
+            if (line.equalsIgnoreCase("end")) {
+                System.out.println("Exiting program. Goodbye!");
+                break;
+            }
 
-        // Handling an assignment operation
-        if (line.contains("=")) {
-            String[] part = line.split("=");
-            String varName = part[0].trim();
-            String expression = part[1].trim();
-            variables.put(varName, defineExpression(varName, expression)); // Assuming you have implemented this method
-        }
-        // Handling print statement
-        if (line.startsWith("print")) {
-            executePrint(line); // Assuming you have implemented this method
-        }
-        // Handling if statement
-        if (line.startsWith("if")) {
-            handleIfStatement(linesOfInput, i); // Assuming you have implemented this method
-        }
-        // Handling while statement
-        if (line.startsWith("while")) {
-            handleWhileLoop(linesOfInput, i); // Assuming you have implemented this method
-        }
+            try {
+                int choice = Integer.parseInt(line);
+                switch (choice) {
+                    case 1 -> input = TestAlgorithms.alg1;
+                    case 2 -> input = TestAlgorithms.alg2;
+                    case 3 -> input = TestAlgorithms.alg3;
+                    case 4 -> input = TestAlgorithms.alg4;
+                    case 5 -> input = TestAlgorithms.alg5;
+                    case 6 -> input = TestAlgorithms.alg6;
+                    case 7 -> input = TestAlgorithms.alg7;
+                    case 8 -> input = TestAlgorithms.alg8;
+                    case 9 -> input = TestAlgorithms.alg9;
+                    case 10 -> input = TestAlgorithms.alg10;
+                    default -> {
+                        System.out.println("Invalid choice. Please enter a number between 1 and 10.");
+                        continue;
+                    }
+                }
+                System.out.println("Your selected snippet of code: " + "\n" + input + "\n");
+                System.out.print("Answer is " + "\n");
+                InterpretInput(input);
+                System.out.println();
+
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a number or \"end\" to exit.");
+       
 
         // // Interpret custom logic (e.g., reversal, factorial, palindrome)
         // String code = input.toString().trim();
@@ -432,6 +466,7 @@ public static void main(String[] args) {
      
     }
     scanner.close();
+}
 }
 }
  
