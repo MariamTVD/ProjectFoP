@@ -44,10 +44,14 @@ public class Main {
             value = evaluateOperand(operands[0]) * evaluateOperand(operands[1]);
         } else if (expression.contains("/")) {
             String[] operands = expression.split("/");
-            value = evaluateOperand(operands[0]) / evaluateOperand(operands[1]);
+            try {
+                value = evaluateOperand(operands[0]) / evaluateOperand(operands[1]);
+            } catch (ArithmeticException e){ return evaluateOperand(operands[0]); }
         } else if (expression.contains("%")) {
             String[] operands = expression.split("%");
-            value = evaluateOperand(operands[0]) % evaluateOperand(operands[1]);
+            try {
+                value = evaluateOperand(operands[0]) % evaluateOperand(operands[1]);
+            } catch (ArithmeticException e){ return evaluateOperand(operands[0]); }
         } else {
             // If no operator, it must be a single number or variable
             value = evaluateOperand(expression);
@@ -465,7 +469,7 @@ public static void main(String[] args) {
         // }
      
     }
-    scanner.close();
+   
 }
 }
 }
