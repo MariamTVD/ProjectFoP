@@ -3,9 +3,9 @@ public class TestAlgorithms {
 //    n = 10
 //    sum = 0
 //    i = 1
-//            while i < n :
-//    sum = sum + i
-//            i = i + 1
+//    while i < n :
+//        sum = sum + i
+//        i = i + 1
 //    print(sum)
 
     public static String alg1 =  "n = 10" + "\n" + "sum = 0" + "\n" + "i = 1" + "\n" + "while i < n :" + "\n" +
@@ -17,11 +17,72 @@ public class TestAlgorithms {
 //    fact = 1
 //    i = 1
 //    while i < n :
-//      fact = fact * i
-//      i = i + 1
+//        fact = fact * i
+//        i = i + 1
 //    print(fact)
 
     public static String alg2 =  "n = 5" + "\n" + "fact = 1" + "\n" + "i = 1" + "\n" + "while i < n :" + "\n" +
             "\t" + "fact = fact * i" + "\n" + "\t" + "i = i + 1" + "\n" + "print(fact)";
+
+  /// 3. GCD of Two Numbers
+//    a = 48
+//    b = 18
+//    while b != 0:
+//      temp = b
+//      b = a % b
+//      a = temp
+//    print (temp)
+
+    public static String alg3 = "a = 48" + "\n" + "b = 18" + "\n" + "while b != 0 :" + "\n" +
+            "\t" + "temp = b" + "\n" + "\t" + "b = a % b" + "\n" + "\t" + "a = temp" + "\n" + "print(b)";
+
+ ///  4. Reverse a Number
+//n = 1234
+//rev = 0
+//while n > 0 :
+//	digit = n % 10
+//	rev = rev * 10
+//	rev = rev + digit
+//	n = n / 10
+//print(rev)
+public static String alg4 ="n = 1234 " + "\n" + "rev = 0" + "\n" + "while n != 0 :" + "\n" +
+            "\t" + "digit = n % 10"  + "\n" + "\t" + "rev = rev * 10" + "\n" + "\t" + "rev = rev + digit" + "\n" + "\t"
+            + "n = n / 10" + "\n" + "print(rev)";
+
+///  8. Sum of Digits
+//n = 1234
+//sum = 0
+//while n > 0
+//    digit = n % 10
+//    sum = sum + digit
+//    n = n / 10
+// print(sum)
+    public static String alg8 = "n = 1234 " + "\n" + "sum = 0" + "\n" + "while n > 0 :" + "\n" +
+            "\t" + "digit = n % 10"  + "\n" + "\t" + "sum = sum + digit" + "\n" + "\t" + "n = n / 10" + "\n" + "print(sum)";
+
+    ///  9. Multiplication Table
+//    n = 5
+//    i = 1
+//    while i <= 10:
+//      result = n * i
+//      print(result)
+//      i = i + 1
+public static String alg9 ="n = 5" + "\n" +  "i = 1" + "\n" + "while i <= 10 :" + "\n" +
+            "\t" + "result = n * i" + "\n" + "\t" + "print(result)" + "\n" + "\t" + "i = i + 1";
+
+    ///  10. Nth Fibonacci Number
+//    n = 9
+//    a = 0
+//    b = 1
+//    i = 2
+//    while i <= n
+//       temp = b
+//       b = a + b
+//       a = temp
+//       i = i + 1
+
+    public static String alg10 ="n = 9" + "\n" +"a = 0 " + "\n" +  "b = 1" + "\n" + "i = 2" + "\n" +
+             "while i < n :" + "\n" + "\t" + "temp = b" + "\n" + "\t" + "b = a + b" + "\n" + "\t" +
+            "a = temp " + "\n" + "\t" + "i = i + 1" + "\n" + "print(b)";
 
 }
