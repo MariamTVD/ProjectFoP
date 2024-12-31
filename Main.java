@@ -15,6 +15,7 @@ public class Main {
         }
         return nonEmptyLines.toArray(new String[0]);
     }
+	
  // Method for evaluating arithmetic expressions
     // (defining whether we are assigning number value or we are changing value
     // according to already defined variable) (EXAMPLE: x = 10 or x = x + 5)
@@ -92,44 +93,21 @@ public class Main {
             i++;
         }
     }
+	 // Method to execute a command
+    public static void executeCommand(String line) {
+        line = line.trim();
+
+        if (line.contains("=")) {
+            // Handle variable assignment
+            String[] parts = line.split("=", 2);
+            String varName = parts[0].trim();
+            String expression = parts[1].trim();
+            variables.put(varName, defineExpression(varName,expression)); // Evaluate and store the variable
+        } else if (line.startsWith("print")) {
+            executePrint(line);
+        }
+    }
 	
-	public class PythonLikeInterpreter {
-
-    private static final Map<String, Integer> variables = new HashMap<>();
-
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        List<String> codeLines = new ArrayList<>();
-
-        System.out.println("Please, enter your code here. Type \"end\" to finish:");
-
-        // Read all lines of code until 'end' is entered
-        while (true) {
-            String line = scanner.nextLine().trim();
-            if (line.equals("end")) break;
-            codeLines.add(line);
-        }
-
-        executeCode(codeLines);
-    }
-
-    private static void executeCode(List<String> codeLines) {
-        int i = 0;
-        // Execute code line by line
-        while (i < codeLines.size()) {
-            String line = codeLines.get(i).trim();
-
-            if (line.startsWith("let ")) {
-                handleAssignment(line);
-            } else if (line.startsWith("print")) {
-                handlePrint(line);
-            } else if (line.startsWith("while ")) {
-                i = handleWhileLoop(codeLines, i);
-            }
-            i++;
-        }
-    }
-
     private static void handleAssignment(String line) {
         String[] parts = line.replace("let ", "").split("=");
         String variable = parts[0].trim();
@@ -146,38 +124,29 @@ public class Main {
         }
     }
 
-    private static int handleWhileLoop(List<String> codeLines, int currentIndex) {
-        String conditionLine = codeLines.get(currentIndex).replace("while", "").trim();
-        String[] conditionParts = conditionLine.split("<");
-        String variable = conditionParts[0].trim();
-        int limit = evaluateExpression(conditionParts[1].trim());
+    private static void handleWhileLoop (String[] lines, int startIndex) {
+	    // Defining syntax error
+        if (!lines[startIndex].contains(":")) {
+            System.out.println("Syntax Error, \":\" must be included, please try again");
+            return;
+        }
+        String conditionLine = lines[startIndex].trim();
+        String condition = conditionLine.substring(5, lines[startIndex].indexOf(':')).trim();
+        List<String> loopBody = new ArrayList<>();
+        int i = startIndex + 1;
 
         // Collect loop body lines
-        List<String> loopBody = new ArrayList<>();
-        int i = currentIndex + 1;
-        while (i < codeLines.size() && !codeLines.get(i).trim().equals("end")) {
-            loopBody.add(codeLines.get(i).trim());
+        while (i < lines.length && lines[i].startsWith("\t")) {
+             loopBody.add(lines[i].trim());
             i++;
         }
-
-        // Execute the loop
-        while (variables.getOrDefault(variable, 0) < limit) {
-            // Execute the loop body
-            for (String line : loopBody) {
-                if (line.startsWith("let ")) {
-                    handleAssignment(line);
-                } else if (line.startsWith("print")) {
-                    handlePrint(line);
-                }
-            }
-            // Ensure the variable gets updated after each iteration
-            if (variables.containsKey(variable)) {
-                int updatedValue = variables.get(variable) + 1;
-                variables.put(variable, updatedValue);  // Update the variable's value
+// execute loop while the condition is true
+        while (evaluateCondition(condition)) {
+            for (String command : loopBody) {
+                executeCommand(command);
             }
         }
-
-        return i; // Return the line index to continue after the loop
+       
     }
 
     private static int evaluateExpression(String expression) {
@@ -212,78 +181,6 @@ public class Main {
         System.out.println(toPrint);  //Print raw string
     }
     }
-
-
-
-class Tokenizer { // Tokenizer class:Supports integers, decimals, operators, and parentheses,Skips spaces for clean processing,Throws an error for invalid characters.
-
- 
-    // Define possible token types
-    enum TokenType { NUMBER, OPERATOR, PARENTHESIS }
-
-    // Represents a single token
-    static class Token {
-        TokenType type;
-        String value;
-
-        Token(TokenType type, String value) {
-            this.type = type;
-            this.value = value;
-        }
-
-        @Override
-        public String toString() {
-            return "Token{" +
-                    "type=" + type +
-                    ", value='" + value + '\'' +
-                    '}';
-        }
-    }
-
-
-    // Main tokenize function
-    public List<Token> tokenize(String expression) {
-        List<Token> tokens = new ArrayList<>(); // List to hold tokens
-        char[] chars = expression.toCharArray(); // Convert input to characters
-       StringBuilder numberBuffer = new StringBuilder(); // Collects multi-digit numbers
-
-
-        for (char c : chars) {
-            // Build numbers
-            if (Character.isDigit(c) || c == '.') {
-                numberBuffer.append(c); // Collect digits into number buffer
-            } else {
-                // If we were collecting a number, finalize it
-                if (!numberBuffer.isEmpty()) {
-                    tokens.add(new Token(TokenType.NUMBER, numberBuffer.toString()));
-                    numberBuffer.setLength(0); // Clear the buffer
-                }
-
-                // Handle operators
-                if ("+-*/%".indexOf(c) >= 0) {
-                    tokens.add(new Token(TokenType.OPERATOR, String.valueOf(c)));
-                }
-                // Handle parentheses
-                else if (c == '(' || c == ')') {
-                    tokens.add(new Token(TokenType.PARENTHESIS, String.valueOf(c)));
-                }
-                // Skip spaces
-                else if (Character.isWhitespace(c)) {
-                    continue;
-                } else {
-                    throw new IllegalArgumentException("Invalid character in expression: " + c);
-                }
-            }
-        }
-
-        // Add any leftover number in the buffer
-        if (!numberBuffer.isEmpty()) {
-            tokens.add(new Token(TokenType.NUMBER, numberBuffer.toString()));
-        }
-
-        return tokens; // Return the list of tokens
-    }
-}
 
 
 
@@ -517,29 +414,24 @@ public static void main(String[] args) {
             handleWhileLoop(linesOfInput, i); // Assuming you have implemented this method
         }
 
-        // Interpret custom logic (e.g., reversal, factorial, palindrome)
-        String code = input.toString().trim();
-        if (code.contains("inputNum =") && code.contains("reversedNum =") && code.contains("while")) {
-            interpretReversalCheck(code);
-        } else if (code.contains("factorialNum =") && code.contains("factorialResult =") && code.contains("while")) {
-            interpretFactorialCheck(code);
-        } else if (code.contains("palindromeNum =") && code.contains("originalPalNum =") && code.contains("reversedPalNum =")) {
-            interpretPalindromeCheck(code);
-        } else if (code.contains("number =") && code.contains("sum_of_digits = ") && code.contains("while")) {
-        	interpretSumofDigitsCheck(code);
-        } else if (code.contains("N =") && code.contains("count =") && code.contains("while count < N")
-                && code.contains("a = b") && code.contains("b = a + b") && code.contains("count += 1")
-                && code.contains("print(b)")) {
-            interpretFibonacciCheck(code);
-        }
+        // // Interpret custom logic (e.g., reversal, factorial, palindrome)
+        // String code = input.toString().trim();
+        // if (code.contains("inputNum =") && code.contains("reversedNum =") && code.contains("while")) {
+        //     interpretReversalCheck(code);
+        // } else if (code.contains("factorialNum =") && code.contains("factorialResult =") && code.contains("while")) {
+        //     interpretFactorialCheck(code);
+        // } else if (code.contains("palindromeNum =") && code.contains("originalPalNum =") && code.contains("reversedPalNum =")) {
+        //     interpretPalindromeCheck(code);
+        // } else if (code.contains("number =") && code.contains("sum_of_digits = ") && code.contains("while")) {
+        // 	interpretSumofDigitsCheck(code);
+        // } else if (code.contains("N =") && code.contains("count =") && code.contains("while count < N")
+        //         && code.contains("a = b") && code.contains("b = a + b") && code.contains("count += 1")
+        //         && code.contains("print(b)")) {
+        //     interpretFibonacciCheck(code);
+        // }
      
     }
     scanner.close();
 }
 }
-
-
-
-
-
-    
+ 
