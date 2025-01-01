@@ -9,7 +9,7 @@ Introduction to Interpreter:
   Features of the program: Program can handle essential features such as:
 1)  Variable assignment -> Variables are kept in the Map<String, Integer>, so they can be easily accessed when needed. We can simply retrieve already defined values or simply assign a new one.
 
-2)  Arithmetic operations such as: +, -, *, /, % -> Program can handle simple arithmetic operations. (Operations like +=, -=, *=, /=, %= are not supported by our program).
+2)  Arithmetic operations such as: +, -, *, /, % -> Program can handle simple arithmetic operations. Program handles // operation from python, as we are working only on integerss. (Operations like +=, -=, *=, /=, %= are not supported by our program).
 
 3) Conditional statements: if, else -> Program handles if/else statements, via checking if given condition is true. Thereby, our program can handle Boolean expressions and return answer of the condition on every iteration. Additionally, program handles syntax errors, such as lack of ":" at the end of if/else condition statement(According to python syntax).
 
