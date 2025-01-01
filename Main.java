@@ -16,7 +16,7 @@ public class Main {
         return nonEmptyLines.toArray(new String[0]);
     }
 	
- // Method for evaluating arithmetic expressions
+    // Method for evaluating arithmetic expressions
     // (defining whether we are assigning number value or we are changing value
     // according to already defined variable) (EXAMPLE: x = 10 or x = x + 5)
     private static int evaluateOperand(String operand) {
@@ -42,11 +42,15 @@ public class Main {
         } else if (expression.contains("*")) {
             String[] operands = expression.split("\\*");
             value = evaluateOperand(operands[0]) * evaluateOperand(operands[1]);
-        } else if (expression.contains("/")) {
-            String[] operands = expression.split("/");
+        } else if (expression.contains("//")) {
+            String[] operands = expression.split("//");
             try {
-                value = evaluateOperand(operands[0]) / evaluateOperand(operands[1]);
-            } catch (ArithmeticException e){ return evaluateOperand(operands[0]); }
+                int dividend = evaluateOperand(operands[0].trim());
+                int divisor = evaluateOperand(operands[1].trim());
+                value = divisor == 0 ? dividend : dividend / divisor; // Prevent zero division
+            } catch (ArithmeticException e) {
+                return 0;
+            }
         } else if (expression.contains("%")) {
             String[] operands = expression.split("%");
             try {
@@ -97,6 +101,15 @@ public class Main {
             i++;
         }
     }
+	// Method to handle else statement
+	 public static void handleElseStatement(String[] lines, int startIndex) {
+        int i = startIndex + 1;
+        
+        while (i < lines.length && !lines[i].trim().startsWith("if") && lines[i].startsWith("\t")) {
+            executeCommand(lines[i]);
+            i++;
+        }
+    }
 	 // Method to execute a command
     public static void executeCommand(String line) {
         line = line.trim();
@@ -112,21 +125,21 @@ public class Main {
         }
     }
 	
-    private static void handleAssignment(String line) {
-        String[] parts = line.replace("let ", "").split("=");
-        String variable = parts[0].trim();
-        int value = evaluateExpression(parts[1].trim());
-        variables.put(variable, value);
-    }
+    // private static void handleAssignment(String line) {
+    //     String[] parts = line.replace("let ", "").split("=");
+    //     String variable = parts[0].trim();
+    //     int value = evaluateExpression(parts[1].trim());
+    //     variables.put(variable, value);
+    // }
 
-    private static void handlePrint(String line) {
-        String variable = line.replace("print", "").trim();
-        if (variables.containsKey(variable)) {
-            System.out.println(variables.get(variable));
-        } else {
-            System.out.println("Error: Undefined variable " + variable);
-        }
-    }
+    // private static void handlePrint(String line) {
+    //     String variable = line.replace("print", "").trim();
+    //     if (variables.containsKey(variable)) {
+    //         System.out.println(variables.get(variable));
+    //     } else {
+    //         System.out.println("Error: Undefined variable " + variable);
+    //     }
+    // }
 
     private static void handleWhileLoop (String[] lines, int startIndex) {
 	    // Defining syntax error
@@ -147,31 +160,34 @@ public class Main {
 // execute loop while the condition is true
         while (evaluateCondition(condition)) {
             for (String command : loopBody) {
+		 // checking if we have nested loop
+		if(command.contains("if"))
+                    handleIfStatement(loopBody.toArray(new String[0]), loopBody.indexOf(command));
                 executeCommand(command);
             }
         }
        
     }
 
-    private static int evaluateExpression(String expression) {
-        // Handle simple integer expressions
-        String[] parts = expression.split("\\+");
-        int value = 0;
-        for (String part : parts) {
-            part = part.trim();
-            if (variables.containsKey(part)) {
-                value += variables.get(part); // Add the variable's value
-            } else {
-                try {
-                    value += Integer.parseInt(part); // Try parsing the value as an integer
-                } catch (NumberFormatException e) {
-                    throw new RuntimeException("Invalid expression: " + expression);
-                }
-            }
-        }
-        return value;
+    // private static int evaluateExpression(String expression) {
+    //     // Handle simple integer expressions
+    //     String[] parts = expression.split("\\+");
+    //     int value = 0;
+    //     for (String part : parts) {
+    //         part = part.trim();
+    //         if (variables.containsKey(part)) {
+    //             value += variables.get(part); // Add the variable's value
+    //         } else {
+    //             try {
+    //                 value += Integer.parseInt(part); // Try parsing the value as an integer
+    //             } catch (NumberFormatException e) {
+    //                 throw new RuntimeException("Invalid expression: " + expression);
+    //             }
+    //         }
+    //     }
+    //     return value;
     
-    }
+    // }
 
     // method for printing
     public static void executePrint(String input) {
@@ -324,11 +340,6 @@ public static int extractNumber(String code, String variable) {
     }
 }
 
-
-
-
-
-
 // Method to reverse the digits of a number
 public static int reverseNumber(int numberToReverse) {
     int reversedNum = 0;
@@ -367,6 +378,8 @@ public static boolean isPalindromeCheck(int number) {
 	return false;
 	
 }
+
+	
 // Creating method for interpreting python code
 public static void InterpretInput(String input) {
         String[] linesOfInput = input.split("\n");
@@ -383,13 +396,15 @@ public static void InterpretInput(String input) {
                 variables.put(varName, defineExpression(varName, expression));
             }
             // handling print assignment
-            if (line.startsWith("print")) {
+            if (line.startsWith("print"))
                 executePrint(line);
-            }
-            //handling if and else
-            if (line.startsWith("if")) {
+            // handling if 
+            if (line.startsWith("if"))
                 handleIfStatement(linesOfInput, i);
-            }
+            // handling else
+	    if (line.startsWith("else"))
+                handleElseStatement(linesOfInput, i);
+            // handling while loop
             if (line.startsWith("while")) {
                 handleWhileLoop(linesOfInput, i);
             }
@@ -397,6 +412,8 @@ public static void InterpretInput(String input) {
 
     }
 
+
+	
 
 public static void main(String[] args) {
     Scanner scanner = new Scanner(System.in);
@@ -448,8 +465,8 @@ public static void main(String[] args) {
                 InterpretInput(input);
                 System.out.println();
 
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Please enter a number or \"end\" to exit.");
+            } catch (NumberFormatException e) {}
+               
        
 
         // // Interpret custom logic (e.g., reversal, factorial, palindrome)
@@ -467,8 +484,7 @@ public static void main(String[] args) {
         //         && code.contains("print(b)")) {
         //     interpretFibonacciCheck(code);
         // }
-     
-    }
+
    
 }
 }
