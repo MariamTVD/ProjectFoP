@@ -448,10 +448,10 @@ public static void main(String[] args) {
                     case 1 -> input = TestAlgorithms.alg1;
                     case 2 -> input = TestAlgorithms.alg2;
                     case 3 -> input = TestAlgorithms.alg3;
-                    case 4 -> input = TestAlgorithms.alg4;
-                    case 5 -> input = TestAlgorithms.alg5;
-                    case 6 -> input = TestAlgorithms.alg6;
-                    case 7 -> input = TestAlgorithms.alg7;
+                    case 4 -> input = TestAlgorithms.alg4;//Algorithm prints 43210 instead of 4321
+                    case 5 -> input = TestAlgorithms.alg5;//Algorithm does not print anything
+                    case 6 -> input = TestAlgorithms.alg6;//Algorithm prints false, as alg4 is not working
+                    case 7 -> input = TestAlgorithms.alg7;//Algorithm does not change value of variable "largest"
                     case 8 -> input = TestAlgorithms.alg8;
                     case 9 -> input = TestAlgorithms.alg9;
                     case 10 -> input = TestAlgorithms.alg10;
